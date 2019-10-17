@@ -5,8 +5,8 @@
 ![img](img/git-structure.jpg)
 
 - Workspace：工作区
-- Index / Stage：暂存区
-- Repository：仓库区（或本地仓库）
+- Index / Stage：暂存区(git add之后到暂存区)
+- Repository：仓库区（或本地仓库）(git commit后到本地仓库)
 - Remote：远程仓库
 
 ## GIT工作流程
@@ -41,10 +41,15 @@
 ## 常见问题
 1. 修改的东西不想要了
 	- 还在工作区？ git checkout
-	- 已经到了暂存区？ `git reset HEAD xx.txt`把已经到暂存区的修改撤回到工作区, 后续可以`git checkout -- xx.txt`彻底撤销修改
-	- 已经到本地仓库了？
-		- `git revert` 撤销 某次操作，此次操作之前和之后的commit和history都会保留，并且把这次撤销
-		- git revert 和 git reset的区别
+	- 已经到了暂存区？
+		- 主要靠`git reset HEAD filename`来回到最近一个commit的版本，其实使用了默认的--mixed参数把修改回复到工作区，然后可以checkout --来彻底删除
+	- 已经到本地仓库的
+		- 主要使用`git reset [--soft --mixed --hard]`
+		- `git reset --hard HEAD~3`之后代码直接变成当前commit往前数3个的状态,工作区干净, git log也看不到那些被消除的commit，但是使用git reflog可以找回之前的状态
+		- `git reset --mixed HEAD^`之后代码变成之前一个那个commit的状态，保留源码，回退commit和index信息，还需要git add和git commit，--mixed是默认，可以不写
+		- `git reset --soft HEAD^`之后代码变成之前一个commit的状态，保留源码，**不回退commit和index信息**，包含了那个commit的修改
+	- git revert 和 git reset的区别
+		- git revert用的比较少，这是使用一次新的commit来中和掉之前某次commit提交的内容，因为revert commit的时候还涉及revert普通的commit和merge commit的区别，所以一般不太使用这个命令
 2. PR发现out of date
 	- git fetch
 	- git rebase origin/master
