@@ -45,9 +45,9 @@
 		- 主要靠`git reset HEAD filename`来回到最近一个commit的版本，其实使用了默认的--mixed参数把修改回复到工作区，然后可以checkout --来彻底删除
 	- 已经到本地仓库的
 		- 主要使用`git reset [--soft --mixed --hard]`
-		- `git reset --hard HEAD~3`之后代码直接变成当前commit往前数3个的状态,工作区干净, git log也看不到那些被消除的commit，但是使用git reflog可以找回之前的状态
-		- `git reset --mixed HEAD^`之后代码变成之前一个那个commit的状态，保留源码，回退commit和index信息，还需要git add和git commit，--mixed是默认，可以不写
-		- `git reset --soft HEAD^`之后代码变成之前一个commit的状态，保留源码，**不回退commit和index信息**，包含了那个commit的修改
+		- `git reset --hard HEAD~3`之后代码直接变成当前commit往前数3个的状态,不保留改动，工作区干净, git log也看不到那些被消除的commit，但是使用git reflog可以找回之前的状态
+		- `git reset --mixed HEAD^`之后代码变成之前一个那个commit的状态，保留改动但是处于**没有被add的状态**，还需要git add和git commit，--mixed是默认，可以不写
+		- `git reset --soft HEAD^`之后代码变成之前一个commit的状态，保留改动但是处于**已经add的状态**，需要git commit
 	- git revert 和 git reset的区别
 		- git revert用的比较少，这是使用一次新的commit来中和掉之前某次commit提交的内容，因为revert commit的时候还涉及revert普通的commit和merge commit的区别，所以一般不太使用这个命令
 2. PR发现out of date
